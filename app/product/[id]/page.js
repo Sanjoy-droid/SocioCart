@@ -1,5 +1,6 @@
 "use client";
 
+import toast, { Toaster } from "react-hot-toast";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
@@ -15,7 +16,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { useToast } from "@/hooks/use-toast";
+// import { useToast } from "@/hooks/use-toast";
 import ProductCard from "@/components/ProductCard";
 
 export default function ProductDetail() {
@@ -25,7 +26,7 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
-  const { toast } = useToast();
+  // const { toast } = useToast();
   const [added, SetAdded] = useState(false);
 
   useEffect(() => {
@@ -58,24 +59,25 @@ export default function ProductDetail() {
     }
   };
 
+  // Handler (uses react-hot-toast's toast)
   const handleAddToCart = () => {
-    console.log("enter");
     if (added) {
-      console.log("true addd");
-      SetAdded((prev) => !prev);
+      // If you have a removeFromCart API, call it here (example commented)
+      // removeFromCart(product.id, quantity);
+      SetAdded(false);
+      toast.success("Product removed from cart.");
       return;
     }
-    console.log("false add");
+
+    // addToCart called quantity times (if your addToCart supports quantity arg,
+    // prefer addToCart(product, quantity) instead of looping)
     for (let i = 0; i < quantity; i++) {
       addToCart(product);
-      SetAdded((prev) => !prev);
     }
-    toast({
-      title: "Added to cart",
-      description: `${quantity} × ${product.title} added to your cart.`,
-    });
-  };
 
+    SetAdded(true);
+    toast.success(`${quantity} × ${product.title} added to your cart.`);
+  };
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -154,6 +156,7 @@ export default function ProductDetail() {
               <span className="font-semibold">Quantity:</span>
               <div className="flex items-center border rounded-lg">
                 <Button
+                  disabled={added}
                   className={`${
                     added ? "cursor-not-allowed" : "cursor-pointer"
                   }`}
@@ -163,10 +166,13 @@ export default function ProductDetail() {
                 >
                   -
                 </Button>
+
                 <span className="w-12 text-center font-semibold">
                   {quantity}
                 </span>
+
                 <Button
+                  disabled={added}
                   className={`${
                     added ? "cursor-not-allowed" : "cursor-pointer"
                   }`}
@@ -183,18 +189,29 @@ export default function ProductDetail() {
             <div className="flex gap-3 mb-8">
               <Button
                 size="lg"
-                className="flex-1 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 cursor-pointer"
+                disabled={
+                  false /* if you want to disable once added, use disabled={false} -> replace with disabled={false} or disabled={someCondition} */
+                }
+                className={`flex-1 transition-all ${
+                  added
+                    ? "bg-green-600 hover:bg-green-600 cursor-not-allowed"
+                    : "bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 cursor-pointer"
+                }`}
                 onClick={handleAddToCart}
               >
                 <ShoppingCart className="mr-2 h-5 w-5" />
                 {added ? "Remove From Cart" : "Add to Cart"}
               </Button>
-              <Button size="lg" variant="outline">
+
+              <Toaster />
+
+              {/* <Button size="lg" variant="outline">
                 <Heart className="h-5 w-5" />
               </Button>
+
               <Button size="lg" variant="outline">
                 <Share2 className="h-5 w-5" />
-              </Button>
+              </Button> */}
             </div>
 
             {/* Features */}

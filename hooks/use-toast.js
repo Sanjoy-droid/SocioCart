@@ -3,7 +3,7 @@
 import * as React from "react";
 
 const TOAST_LIMIT = 3;
-const TOAST_REMOVE_DELAY = 5000;
+const TOAST_REMOVE_DELAY = 500;
 
 let count = 0;
 
