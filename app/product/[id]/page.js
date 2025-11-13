@@ -26,6 +26,7 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
   const { toast } = useToast();
+  const [added, SetAdded] = useState(false);
 
   useEffect(() => {
     if (params.id) {
@@ -58,8 +59,16 @@ export default function ProductDetail() {
   };
 
   const handleAddToCart = () => {
+    console.log("enter");
+    if (added) {
+      console.log("true addd");
+      SetAdded((prev) => !prev);
+      return;
+    }
+    console.log("false add");
     for (let i = 0; i < quantity; i++) {
       addToCart(product);
+      SetAdded((prev) => !prev);
     }
     toast({
       title: "Added to cart",
@@ -145,6 +154,9 @@ export default function ProductDetail() {
               <span className="font-semibold">Quantity:</span>
               <div className="flex items-center border rounded-lg">
                 <Button
+                  className={`${
+                    added ? "cursor-not-allowed" : "cursor-pointer"
+                  }`}
                   variant="ghost"
                   size="icon"
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -155,6 +167,9 @@ export default function ProductDetail() {
                   {quantity}
                 </span>
                 <Button
+                  className={`${
+                    added ? "cursor-not-allowed" : "cursor-pointer"
+                  }`}
                   variant="ghost"
                   size="icon"
                   onClick={() => setQuantity(quantity + 1)}
@@ -168,11 +183,11 @@ export default function ProductDetail() {
             <div className="flex gap-3 mb-8">
               <Button
                 size="lg"
-                className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                className="flex-1 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 cursor-pointer"
                 onClick={handleAddToCart}
               >
                 <ShoppingCart className="mr-2 h-5 w-5" />
-                Add to Cart
+                {added ? "Remove From Cart" : "Add to Cart"}
               </Button>
               <Button size="lg" variant="outline">
                 <Heart className="h-5 w-5" />

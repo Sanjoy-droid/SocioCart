@@ -89,10 +89,10 @@ export default function ProductCard({ product, index = 0 }) {
               }`}
             >
               <Button
-                className="w-full bg-white text-black hover:bg-gray-100"
+                className="w-full bg-gray-200 text-black hover:bg-gray-100 cursor-pointer"
                 onClick={handleAddToCart}
               >
-                <ShoppingCart className="mr-2 h-4 w-4" />
+                <ShoppingCart className="mr-2 h-4 w-4 " />
                 Add to Cart
               </Button>
             </div>
