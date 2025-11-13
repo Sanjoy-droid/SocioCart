@@ -152,11 +152,11 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm mb-4 md:mb-0">
+          <div className="flex flex-col md:flex-row justify-center items-center">
+            <p className="text-sm mb-4 md:mb-0 text-center">
               © 2025 SocioCart. All rights reserved.
             </p>
-            <div className="flex items-center space-x-4">
+            {/* <div className="flex items-center space-x-4">
               <img src="/api/placeholder/40/25" alt="Visa" className="h-6" />
               <img
                 src="/api/placeholder/40/25"
@@ -169,7 +169,7 @@ export default function Footer() {
                 alt="Apple Pay"
                 className="h-6"
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

@@ -1,40 +1,65 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import ProductCard from "./ProductCard";
 import { Loader2 } from "lucide-react";
 import ProductFilters from "./ProductFilter";
 
 export default function ProductGrid({ categoryFilter = null }) {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({
-    category: categoryFilter || "all",
+  const searchParams = useSearchParams();
+  const categoryFromUrl = searchParams?.get("category") ?? null;
+
+  // initialize filters using url -> prop -> default
+  const [filters, setFilters] = useState(() => ({
+    category: categoryFromUrl || categoryFilter || "all",
     sortBy: "default",
     priceRange: [0, 1000],
-  });
+  }));
 
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // keep filters.category in sync with ?category=... changes
   useEffect(() => {
-    fetchProducts();
-  }, [filters.category]);
+    if (categoryFromUrl) {
+      setFilters((prev) => ({ ...prev, category: categoryFromUrl }));
+    } else if (categoryFilter) {
+      // if there's a prop-provided category and no URL param, respect the prop
+      setFilters((prev) => ({ ...prev, category: categoryFilter }));
+    } else {
+      // otherwise default to 'all'
+      setFilters((prev) => ({ ...prev, category: "all" }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoryFromUrl, categoryFilter]);
 
-  const fetchProducts = async () => {
+  // fetch function (memoized so it's stable if you need)
+  const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
       const url =
         filters.category === "all"
           ? "https://fakestoreapi.com/products"
-          : `https://fakestoreapi.com/products/category/${filters.category}`;
+          : `https://fakestoreapi.com/products/category/${encodeURIComponent(
+              filters.category
+            )}`;
 
       const response = await fetch(url);
       const data = await response.json();
-      setProducts(data);
+      setProducts(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error fetching products:", error);
+      setProducts([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters.category]);
+
+  // refetch when category changes
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   const filteredAndSortedProducts = () => {
     let filtered = [...products];
@@ -42,7 +67,8 @@ export default function ProductGrid({ categoryFilter = null }) {
     // Price filter
     filtered = filtered.filter(
       (p) =>
-        p.price >= filters.priceRange[0] && p.price <= filters.priceRange[1]
+        p.price >= (filters.priceRange?.[0] ?? 0) &&
+        p.price <= (filters.priceRange?.[1] ?? Infinity)
     );
 
     // Sort

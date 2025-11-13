@@ -72,13 +72,13 @@ export default function ProductCard({ product, index = 0 }) {
                   }`}
                 />
               </Button>
-              <Button
+              {/* <Button
                 size="icon"
                 variant="secondary"
                 className="rounded-full bg-white hover:bg-gray-100"
               >
                 <Eye className="h-4 w-4" />
-              </Button>
+              </Button> */}
             </div>
 
             <div
