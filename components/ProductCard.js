@@ -44,14 +44,14 @@ export default function ProductCard({ product, index = 0 }) {
       <Link href={`/product/${product.id}`}>
         {/* Image Container */}
         <div className="relative aspect-square bg-gray-100 overflow-hidden">
-          {/* <Image
+          <Image
             src={product.image}
             alt={product.title}
             fill
             className={`object-contain p-4 transition-transform duration-500 ${
               isHovered ? "scale-110" : "scale-100"
             }`}
-          /> */}
+          />
 
           {/* Overlay Actions */}
           <div
@@ -100,7 +100,7 @@ export default function ProductCard({ product, index = 0 }) {
 
           {/* Badges */}
           {product.rating?.rate >= 4.5 && (
-            <div className="absolute top-4 left-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
+            <div className="absolute top-4 left-4 bg-linear-to-r from-purple-600 to-pink-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
               Bestseller
             </div>
           )}

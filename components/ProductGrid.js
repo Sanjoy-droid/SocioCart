@@ -74,7 +74,7 @@ export default function ProductGrid({ categoryFilter = null }) {
   const displayProducts = filteredAndSortedProducts();
 
   return (
-    <div className="grid lg:grid-cols-[280px_1fr] gap-8">
+    <div className="grid lg:grid-cols-[280px_1fr] gap-8 ">
       <ProductFilters filters={filters} setFilters={setFilters} />
 
       <div>

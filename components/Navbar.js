@@ -34,9 +34,9 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg"></div>
-              <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                LuxeStore
+              <div className="w-8 h-8 bg-linear-to-br from-purple-600 to-pink-600 rounded-lg"></div>
+              <span className="text-xl font-bold bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                SocioCart
               </span>
             </Link>
 
@@ -52,25 +52,25 @@ export default function Navbar() {
                 href="/products"
                 className="text-gray-700 hover:text-purple-600 transition-colors"
               >
-                Products
+                All Products
               </Link>
-              <Link
+              {/* <Link
                 href="/categories"
                 className="text-gray-700 hover:text-purple-600 transition-colors"
               >
                 Categories
-              </Link>
-              <Link
+              </Link> */}
+              {/* <Link
                 href="/about"
                 className="text-gray-700 hover:text-purple-600 transition-colors"
               >
                 About
-              </Link>
+              </Link> */}
             </div>
 
             {/* Actions */}
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="icon" className="hidden md:flex">
+              {/* <Button variant="ghost" size="icon" className="hidden md:flex">
                 <Search className="h-5 w-5" />
               </Button>
               <Button variant="ghost" size="icon" className="hidden md:flex">
@@ -78,7 +78,7 @@ export default function Navbar() {
               </Button>
               <Button variant="ghost" size="icon" className="hidden md:flex">
                 <User className="h-5 w-5" />
-              </Button>
+              </Button> */}
               <Button
                 variant="ghost"
                 size="icon"

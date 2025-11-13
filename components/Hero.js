@@ -3,12 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { Link as ScrollLink } from "react-scroll";
 
 export default function Hero() {
   return (
     <section className="relative h-[600px] flex items-center overflow-hidden mt-16">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 opacity-10"></div>
+      <div className="absolute inset-0 bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 opacity-10"></div>
 
       {/* Animated background shapes */}
       <div className="absolute inset-0 overflow-hidden">
@@ -21,13 +22,13 @@ export default function Hero() {
         <div className="max-w-3xl">
           <div className="inline-block px-4 py-2 bg-purple-100 rounded-full mb-6 animate-fade-in">
             <span className="text-purple-600 font-semibold text-sm">
-              ✨ New Collection 2024
+              ✨ New Collection 2025
             </span>
           </div>
 
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 animate-slide-up">
             Discover Your
-            <span className="block bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 bg-clip-text text-transparent">
+            <span className="block bg-linear-to-br from-purple-600 via-pink-600 to-orange-500 bg-clip-text text-transparent">
               Perfect Style
             </span>
           </h1>
@@ -47,14 +48,16 @@ export default function Hero() {
             <Link href="/products">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white group"
+                className="bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white group cursor-pointer"
               >
                 Shop Now
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <Button size="lg" variant="outline">
-              View Collections
+            <Button size="lg" variant="outline" className="cursor-pointer">
+              <ScrollLink to="collection" smooth={true} duration={300}>
+                View Collections
+              </ScrollLink>
             </Button>
           </div>
 

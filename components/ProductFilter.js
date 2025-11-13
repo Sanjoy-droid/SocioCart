@@ -78,7 +78,7 @@ export default function ProductFilters({ filters, setFilters }) {
             </div>
 
             {/* Price Range */}
-            <div>
+            <div className=" ">
               <h3 className="font-semibold mb-4 text-lg">Price Range</h3>
               <div className="space-y-4">
                 <Slider
@@ -89,9 +89,9 @@ export default function ProductFilters({ filters, setFilters }) {
                   onValueChange={(value) =>
                     setFilters({ ...filters, priceRange: value })
                   }
-                  className="w-full"
+                  className="w-full px-3"
                 />
-                <div className="flex justify-between text-sm text-gray-600">
+                <div className="flex justify-between text-sm text-gray-600 mx-2">
                   <span>${filters.priceRange[0]}</span>
                   <span>${filters.priceRange[1]}</span>
                 </div>

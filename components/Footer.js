@@ -9,8 +9,8 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg"></div>
-              <span className="text-xl font-bold text-white">LuxeStore</span>
+              <div className="w-8 h-8  bg-linear-to-br from-purple-600 to-pink-600 rounded-lg"></div>
+              <span className="text-xl font-bold text-white">SocioCart</span>
             </div>
             <p className="text-sm mb-4">
               Your premium destination for quality products and exceptional
@@ -154,7 +154,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm mb-4 md:mb-0">
-              © 2024 LuxeStore. All rights reserved.
+              © 2025 SocioCart. All rights reserved.
             </p>
             <div className="flex items-center space-x-4">
               <img src="/api/placeholder/40/25" alt="Visa" className="h-6" />
