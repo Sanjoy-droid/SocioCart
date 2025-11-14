@@ -1,8 +1,6 @@
-import dynamic from "next/dynamic";
-
-const ProductGrid = dynamic(() => import("@/components/ProductGrid"), {
-  ssr: false,
-});
+// app/products/page.jsx
+import React, { Suspense } from "react";
+import ProductGrid from "@/components/ProductGrid"; // client component, normal import
 
 export default function ProductsPage() {
   return (
@@ -16,7 +14,11 @@ export default function ProductsPage() {
           </p>
         </div>
 
-        <ProductGrid />
+        <Suspense
+          fallback={<div className="py-12 text-center">Loading products…</div>}
+        >
+          <ProductGrid />
+        </Suspense>
       </div>
     </div>
   );
