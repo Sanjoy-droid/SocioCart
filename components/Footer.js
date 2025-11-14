@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -8,11 +9,19 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8  bg-linear-to-br from-purple-600 to-pink-600 rounded-lg"></div>
-              <span className="text-xl font-bold text-white">SocioCart</span>
+            <div className="flex items-center gap-2">
+              <Image
+                src="/logo2.png"
+                alt="SocioCart logo"
+                width={32}
+                height={32}
+                className="rounded-lg"
+              />
+              <span className="text-xl font-bold bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                SocioCart
+              </span>
             </div>
-            <p className="text-sm mb-4">
+            <p className="text-sm my-4">
               Your premium destination for quality products and exceptional
               shopping experiences.
             </p>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ShoppingCart, Search, Menu, X, Heart, User } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
@@ -34,10 +35,18 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-linear-to-br from-purple-600 to-pink-600 rounded-lg"></div>
-              <span className="text-xl font-bold bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                SocioCart
-              </span>
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/logo2.png"
+                  alt="SocioCart logo"
+                  width={32}
+                  height={32}
+                  className="rounded-lg"
+                />
+                <span className="text-xl font-bold bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  SocioCart
+                </span>
+              </div>
             </Link>
 
             {/* Desktop Navigation */}

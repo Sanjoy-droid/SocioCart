@@ -192,10 +192,10 @@ export default function ProductDetail() {
                 disabled={
                   false /* if you want to disable once added, use disabled={false} -> replace with disabled={false} or disabled={someCondition} */
                 }
-                className={`flex-1 transition-all ${
+                className={`flex-1 transition-all cursor-pointer ${
                   added
-                    ? "bg-green-600 hover:bg-green-600 cursor-not-allowed"
-                    : "bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 cursor-pointer"
+                    ? "bg-green-600 hover:bg-green-600 "
+                    : "bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 "
                 }`}
                 onClick={handleAddToCart}
               >

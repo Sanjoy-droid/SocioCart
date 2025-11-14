@@ -60,16 +60,37 @@ export default function ProductFilters({ filters, setFilters }) {
                   setIsOpen(false);
                 }}
               >
-                <div className="flex items-center space-x-2 mb-3">
-                  <RadioGroupItem value="all" id="all" />
-                  <Label htmlFor="all" className="cursor-pointer">
+                <div
+                  className="flex items-center space-x-2 mb-3 cursor-pointer"
+                  onClick={() => {
+                    setFilters({ ...filters, category: "all" });
+                    setIsOpen(false);
+                  }}
+                >
+                  <RadioGroupItem
+                    value="all"
+                    id="all"
+                    className="cursor-pointer"
+                  />
+                  <Label htmlFor="all" className="capitalize cursor-pointer">
                     All Products
                   </Label>
                 </div>
                 {categories.map((cat) => (
-                  <div key={cat} className="flex items-center space-x-2 mb-3">
-                    <RadioGroupItem value={cat} id={cat} />
-                    <Label htmlFor={cat} className="cursor-pointer capitalize">
+                  <div
+                    key={cat}
+                    className="flex items-center space-x-2 mb-3 cursor-pointer"
+                    onClick={() => {
+                      setFilters({ ...filters, category: cat });
+                      setIsOpen(false);
+                    }}
+                  >
+                    <RadioGroupItem
+                      value={cat}
+                      id={cat}
+                      className="cursor-pointer"
+                    />
+                    <Label htmlFor={cat} className="capitalize cursor-pointer">
                       {cat}
                     </Label>
                   </div>
@@ -108,33 +129,72 @@ export default function ProductFilters({ filters, setFilters }) {
                   setIsOpen(false);
                 }}
               >
-                <div className="flex items-center space-x-2 mb-3">
-                  <RadioGroupItem value="default" id="default" />
-                  <Label htmlFor="default" className="cursor-pointer">
+                <div
+                  className="flex items-center space-x-2 mb-3 cursor-pointer"
+                  onClick={() => {
+                    setFilters({ ...filters, sortBy: "default" });
+                    setIsOpen(false);
+                  }}
+                >
+                  <RadioGroupItem
+                    value="default"
+                    id="default"
+                    className="cursor-pointer"
+                  />
+                  <Label className="cursor-pointer" htmlFor="default">
                     Default
                   </Label>
                 </div>
-                <div className="flex items-center space-x-2 mb-3">
-                  <RadioGroupItem value="price-low" id="price-low" />
-                  <Label htmlFor="price-low" className="cursor-pointer">
+                <div
+                  className="flex items-center space-x-2 mb-3 cursor-pointer"
+                  onClick={() => {
+                    setFilters({ ...filters, sortBy: "price-low" });
+                    setIsOpen(false);
+                  }}
+                >
+                  <RadioGroupItem
+                    value="price-low"
+                    id="price-low"
+                    className="cursor-pointer"
+                  />
+                  <Label className="cursor-pointer" htmlFor="price-low">
                     Price: Low to High
                   </Label>
                 </div>
-                <div className="flex items-center space-x-2 mb-3">
-                  <RadioGroupItem value="price-high" id="price-high" />
-                  <Label htmlFor="price-high" className="cursor-pointer">
+                <div
+                  className="flex items-center space-x-2 mb-3 cursor-pointer"
+                  onClick={() => {
+                    setFilters({ ...filters, sortBy: "price-high" });
+                    setIsOpen(false);
+                  }}
+                >
+                  <RadioGroupItem
+                    value="price-high"
+                    id="price-high"
+                    className="cursor-pointer"
+                  />
+                  <Label className="cursor-pointer" htmlFor="price-high">
                     Price: High to Low
                   </Label>
                 </div>
-                <div className="flex items-center space-x-2 mb-3">
-                  <RadioGroupItem value="rating" id="rating" />
-                  <Label htmlFor="rating" className="cursor-pointer">
+                <div
+                  className="flex items-center space-x-2 mb-3 cursor-pointer"
+                  onClick={() => {
+                    setFilters({ ...filters, sortBy: "rating" });
+                    setIsOpen(false);
+                  }}
+                >
+                  <RadioGroupItem
+                    value="rating"
+                    id="rating"
+                    className="cursor-pointer"
+                  />
+                  <Label className="cursor-pointer" htmlFor="rating">
                     Highest Rated
                   </Label>
                 </div>
               </RadioGroup>
             </div>
-
             {/* Reset Filters */}
             <Button
               variant="outline"
