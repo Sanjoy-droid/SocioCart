@@ -1,7 +1,12 @@
-import ProductGrid from "@/components/ProductGrid";
 import Hero from "@/components/Hero";
 import Categories from "@/components/Categories";
 import Newsletter from "@/components/Newsletter";
+
+import dynamic from "next/dynamic";
+
+const ProductGrid = dynamic(() => import("@/components/ProductGrid"), {
+  ssr: false,
+});
 
 export default function Home() {
   return (
