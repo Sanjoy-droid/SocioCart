@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ShoppingCart, Menu, X, Home, Package, Router } from "lucide-react";
+import { ShoppingCart, Menu, X, Home, Package, Store } from "lucide-react";
 import { useUser, UserButton, useClerk } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
@@ -14,6 +14,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isSeller, setIsSeller] = useState(false);
   const { cart } = useCart();
   const { user, isLoaded } = useUser();
   const { openSignIn } = useClerk();
@@ -26,6 +27,19 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Check if user is a seller
+  useEffect(() => {
+    if (user) {
+      // Check user metadata or role for seller status
+      const sellerRole =
+        user.publicMetadata?.role === "seller" ||
+        user.unsafeMetadata?.isSeller === true;
+      setIsSeller(sellerRole);
+    } else {
+      setIsSeller(false);
+    }
+  }, [user]);
 
   const cartItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -68,6 +82,15 @@ export default function Navbar() {
               >
                 All Products
               </Link>
+              {isSeller && (
+                <Link
+                  href="/seller/dashboard"
+                  className="text-gray-700 hover:text-purple-600 transition-colors font-medium flex items-center gap-1"
+                >
+                  <Store className="h-4 w-4" />
+                  Seller Dashboard
+                </Link>
+              )}
             </div>
 
             {/* Actions */}
@@ -107,6 +130,15 @@ export default function Navbar() {
                             onClick={() => router.push("/orders")}
                           />
                         </UserButton.MenuItems>
+                        {isSeller && (
+                          <UserButton.MenuItems>
+                            <UserButton.Action
+                              label="Seller Dashboard"
+                              labelIcon={<Store className="h-4 w-4" />}
+                              onClick={() => router.push("/seller/dashboard")}
+                            />
+                          </UserButton.MenuItems>
+                        )}
                         {isMobileMenuOpen && (
                           <>
                             <UserButton.MenuItems>
@@ -130,7 +162,7 @@ export default function Navbar() {
                   ) : (
                     <Button
                       onClick={() => openSignIn()}
-                      className="hidden md:flex bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold shadow-sm hover:shadow-md transition-all px-6"
+                      className="hidden md:flex bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold shadow-sm hover:shadow-md transition-all px-6 cursor-pointer"
                     >
                       Sign In
                     </Button>
@@ -172,6 +204,16 @@ export default function Navbar() {
                 >
                   Products
                 </Link>
+                {isSeller && (
+                  <Link
+                    href="/seller/dashboard"
+                    className="text-gray-700 hover:text-purple-600 transition-colors font-medium py-2 flex items-center gap-2"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Store className="h-4 w-4" />
+                    Seller Dashboard
+                  </Link>
+                )}
 
                 {/* Mobile Sign In Button */}
                 {isLoaded && !user && (
@@ -180,7 +222,7 @@ export default function Navbar() {
                       openSignIn();
                       setIsMobileMenuOpen(false);
                     }}
-                    className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold shadow-sm w-full"
+                    className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold shadow-sm w-full cursor-pointer"
                   >
                     Sign In
                   </Button>
