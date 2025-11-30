@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { toast } from "react-hot-toast";
 
 export default function UploadProduct() {
   const router = useRouter();
@@ -25,9 +26,8 @@ export default function UploadProduct() {
     name: "",
     description: "",
     price: "",
+    offerPrice: "",
     category: "",
-    stock: "",
-    brand: "",
   });
 
   const handleImageUpload = (e) => {
@@ -53,29 +53,58 @@ export default function UploadProduct() {
   };
 
   const handleSubmit = async () => {
+    // Validation
+    if (
+      !formData.name ||
+      !formData.description ||
+      !formData.price ||
+      !formData.category
+    ) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    if (images.length === 0) {
+      toast.error("Please upload at least one image");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      // TODO: Implement product upload API call
-      // Include user.id as sellerId
-      const productData = {
-        ...formData,
-        sellerId: user?.id,
-        images: images,
-        createdAt: new Date().toISOString(),
-      };
+      // Create FormData object
+      const formDataToSend = new FormData();
+      formDataToSend.append("name", formData.name);
+      formDataToSend.append("description", formData.description);
+      formDataToSend.append("category", formData.category);
+      formDataToSend.append("price", formData.price);
+      formDataToSend.append(
+        "offerPrice",
+        formData.offerPrice || formData.price,
+      );
 
-      console.log("Product data:", productData);
+      // Append all image files
+      images.forEach((image) => {
+        formDataToSend.append("images", image.file);
+      });
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Make API call
+      const response = await fetch("/api/product/add", {
+        method: "POST",
+        body: formDataToSend,
+      });
 
-      // Show success and redirect
-      alert("Product uploaded successfully!");
-      router.push("/seller/dashboard/my-products");
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success("Product uploaded successfully!");
+        router.push("/seller/dashboard/my-products");
+      } else {
+        toast.error(data.message || "Failed to upload product");
+      }
     } catch (error) {
       console.error("Error uploading product:", error);
-      alert("Failed to upload product. Please try again.");
+      toast.error("Failed to upload product. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -120,7 +149,7 @@ export default function UploadProduct() {
                   <button
                     type="button"
                     onClick={() => removeImage(image.id)}
-                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -196,45 +225,31 @@ export default function UploadProduct() {
               </div>
 
               <div>
-                <Label htmlFor="stock">Stock Quantity *</Label>
+                <Label htmlFor="offerPrice">Offer Price ($)</Label>
                 <Input
-                  id="stock"
-                  name="stock"
+                  id="offerPrice"
+                  name="offerPrice"
                   type="number"
-                  value={formData.stock}
+                  step="0.01"
+                  value={formData.offerPrice}
                   onChange={handleInputChange}
-                  placeholder="0"
-                  required
+                  placeholder="0.00 (optional)"
                   className="mt-1"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="category">Category *</Label>
-                <Input
-                  id="category"
-                  name="category"
-                  value={formData.category}
-                  onChange={handleInputChange}
-                  placeholder="e.g., Electronics, Fashion, Home"
-                  required
-                  className="mt-1"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="brand">Brand</Label>
-                <Input
-                  id="brand"
-                  name="brand"
-                  value={formData.brand}
-                  onChange={handleInputChange}
-                  placeholder="Brand name (optional)"
-                  className="mt-1"
-                />
-              </div>
+            <div>
+              <Label htmlFor="category">Category *</Label>
+              <Input
+                id="category"
+                name="category"
+                value={formData.category}
+                onChange={handleInputChange}
+                placeholder="e.g., Electronics, Fashion, Home"
+                required
+                className="mt-1"
+              />
             </div>
           </CardContent>
         </Card>
@@ -245,7 +260,7 @@ export default function UploadProduct() {
             type="button"
             variant="outline"
             onClick={() => router.push("/seller/dashboard")}
-            className="flex-1"
+            className="flex-1 cursor-pointer"
             disabled={isSubmitting}
           >
             Cancel
@@ -253,7 +268,7 @@ export default function UploadProduct() {
           <Button
             type="button"
             onClick={handleSubmit}
-            className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+            className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white cursor-pointer"
             disabled={isSubmitting}
           >
             {isSubmitting ? (
