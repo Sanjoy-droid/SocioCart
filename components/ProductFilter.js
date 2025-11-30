@@ -177,22 +177,22 @@ export default function ProductFilters({ filters, setFilters }) {
                     Price: High to Low
                   </Label>
                 </div>
-                <div
-                  className="flex items-center space-x-2 mb-3 cursor-pointer"
-                  onClick={() => {
-                    setFilters({ ...filters, sortBy: "rating" });
-                    setIsOpen(false);
-                  }}
-                >
-                  <RadioGroupItem
-                    value="rating"
-                    id="rating"
-                    className="cursor-pointer"
-                  />
-                  <Label className="cursor-pointer" htmlFor="rating">
-                    Highest Rated
-                  </Label>
-                </div>
+                {/* <div */}
+                {/*   className="flex items-center space-x-2 mb-3 cursor-pointer" */}
+                {/*   onClick={() => { */}
+                {/*     setFilters({ ...filters, sortBy: "rating" }); */}
+                {/*     setIsOpen(false); */}
+                {/*   }} */}
+                {/* > */}
+                {/*   <RadioGroupItem */}
+                {/*     value="rating" */}
+                {/*     id="rating" */}
+                {/*     className="cursor-pointer" */}
+                {/*   /> */}
+                {/*   <Label className="cursor-pointer" htmlFor="rating"> */}
+                {/*     Highest Rated */}
+                {/*   </Label> */}
+                {/* </div> */}
               </RadioGroup>
             </div>
             {/* Reset Filters */}

@@ -116,23 +116,23 @@ export default function ProductCard({ product, index = 0 }) {
           </h3>
 
           {/* Rating */}
-          <div className="flex items-center gap-1 mb-3">
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`h-3 w-3 ${
-                    i < Math.floor(product.rating?.rate || 0)
-                      ? "fill-yellow-400 text-yellow-400"
-                      : "fill-gray-200 text-gray-200"
-                  }`}
-                />
-              ))}
-            </div>
-            <span className="text-xs text-gray-600">
-              ({product.rating?.count || 0})
-            </span>
-          </div>
+          {/* <div className="flex items-center gap-1 mb-3"> */}
+          {/*   <div className="flex"> */}
+          {/*     {[...Array(5)].map((_, i) => ( */}
+          {/*       <Star */}
+          {/*         key={i} */}
+          {/*         className={`h-3 w-3 ${ */}
+          {/*           i < Math.floor(product.rating?.rate || 0) */}
+          {/*             ? "fill-yellow-400 text-yellow-400" */}
+          {/*             : "fill-gray-200 text-gray-200" */}
+          {/*         }`} */}
+          {/*       /> */}
+          {/*     ))} */}
+          {/*   </div> */}
+          {/*   <span className="text-xs text-gray-600"> */}
+          {/*     ({product.rating?.count || 0}) */}
+          {/*   </span> */}
+          {/* </div> */}
 
           {/* Price */}
           <div className="flex items-center justify-between">
