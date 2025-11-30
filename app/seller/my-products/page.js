@@ -26,6 +26,29 @@ export default function MyProducts() {
     return products.filter((product) => product.userId === user.id);
   }, [products, user?.id]);
 
+  const handleDelete = async (productId) => {
+    if (!confirm("Are you sure you want to delete this product?")) return;
+
+    try {
+      const response = await fetch(`/api/product/delete/${productId}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("Product deleted successfully!");
+        // Refresh products - you might need to add a refresh function in your context
+        window.location.reload(); // Or call context's fetchProducts function
+      } else {
+        alert(data.message || "Failed to delete product");
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      alert("Failed to delete product. Please try again.");
+    }
+  };
+
   const filteredProducts = useMemo(() => {
     return myProducts.filter(
       (product) =>
@@ -33,6 +56,8 @@ export default function MyProducts() {
         product.category.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [myProducts, searchQuery]);
+
+  const isLoading = !products;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-white pt-20 pb-12">
@@ -82,7 +107,7 @@ export default function MyProducts() {
         </Card>
 
         {/* Products Grid */}
-        {!products ? (
+        {isLoading ? (
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
           </div>
@@ -169,30 +194,30 @@ export default function MyProducts() {
                         {product.image.length > 1 ? "s" : ""}
                       </span>
                     </div>
-                    {/*   <div className="flex gap-2 pt-2"> */}
-                    {/*     <Button */}
-                    {/*       variant="outline" */}
-                    {/*       size="sm" */}
-                    {/*       className="flex-1 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-300" */}
-                    {/*       onClick={() => */}
-                    {/*         router.push( */}
-                    {/*           `/seller/dashboard/edit-product/${product._id}`, */}
-                    {/*         ) */}
-                    {/*       } */}
-                    {/*     > */}
-                    {/*       <Edit className="h-4 w-4 mr-1" /> */}
-                    {/*       Edit */}
-                    {/*     </Button> */}
-                    {/*     <Button */}
-                    {/*       variant="outline" */}
-                    {/*       size="sm" */}
-                    {/*       className="flex-1 hover:bg-red-50 hover:text-red-600 hover:border-red-300" */}
-                    {/*       onClick={() => handleDelete(product._id)} */}
-                    {/*     > */}
-                    {/*       <Trash2 className="h-4 w-4 mr-1" /> */}
-                    {/*       Delete */}
-                    {/*     </Button> */}
-                    {/*   </div> */}
+                    <div className="flex gap-2 pt-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-300"
+                        onClick={() =>
+                          router.push(
+                            `/seller/dashboard/edit-product/${product._id}`,
+                          )
+                        }
+                      >
+                        <Edit className="h-4 w-4 mr-1" />
+                        Edit
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1 hover:bg-red-50 hover:text-red-600 hover:border-red-300"
+                        onClick={() => handleDelete(product._id)}
+                      >
+                        <Trash2 className="h-4 w-4 mr-1" />
+                        Delete
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

@@ -98,7 +98,15 @@ export default function UploadProduct() {
 
       if (data.success) {
         toast.success("Product uploaded successfully!");
-        router.push("/seller/dashboard/my-products");
+        // Clear all form fields
+        setFormData({
+          name: "",
+          description: "",
+          price: "",
+          offerPrice: "",
+          category: "",
+        });
+        setImages([]);
       } else {
         toast.error(data.message || "Failed to upload product");
       }
@@ -118,7 +126,7 @@ export default function UploadProduct() {
           <Button
             variant="ghost"
             onClick={() => router.push("/seller/dashboard")}
-            className="mb-4 hover:bg-purple-50"
+            className="mb-4 hover:bg-purple-50 cursor-pointer"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Dashboard
