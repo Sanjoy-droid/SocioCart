@@ -16,42 +16,72 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-// import { useToast } from "@/hooks/use-toast";
 import ProductCard from "@/components/ProductCard";
+import { useAppContext } from "@/context/AppContext";
 
 export default function ProductDetail() {
   const params = useParams();
+  const { products } = useAppContext();
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
-  // const { toast } = useToast();
   const [added, SetAdded] = useState(false);
 
   useEffect(() => {
-    if (params.id) {
+    if (params.id && products.length > 0) {
       fetchProduct();
     }
-  }, [params.id]);
+  }, [params.id, products.length]);
 
   const fetchProduct = async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        `https://fakestoreapi.com/products/${params.id}`
-      );
-      const data = await response.json();
-      setProduct(data);
+      // Find product from your backend data
+      const foundProduct = products.find((p) => p._id === params.id);
 
-      // Fetch related products from same category
-      const categoryResponse = await fetch(
-        `https://fakestoreapi.com/products/category/${data.category}`
-      );
-      const categoryData = await categoryResponse.json();
-      setRelatedProducts(
-        categoryData.filter((p) => p.id !== data.id).slice(0, 4)
-      );
+      if (foundProduct) {
+        // Transform backend product to match component expectations
+        const transformedProduct = {
+          id: foundProduct._id,
+          title: foundProduct.name,
+          image: foundProduct.image[0] || foundProduct.image,
+          category: foundProduct.category,
+          price: foundProduct.price,
+          offerPrice: foundProduct.offerPrice,
+          description: foundProduct.description,
+          rating: {
+            rate: foundProduct.rating?.rate || 4.5,
+            count: foundProduct.rating?.count || 0,
+          },
+        };
+
+        setProduct(transformedProduct);
+
+        // Fetch related products from same category
+        const related = products
+          .filter(
+            (p) =>
+              p.category === foundProduct.category &&
+              p._id !== foundProduct._id,
+          )
+          .slice(0, 4)
+          .map((p) => ({
+            id: p._id,
+            title: p.name,
+            image: p.image[0] || p.image,
+            category: p.category,
+            price: p.price,
+            offerPrice: p.offerPrice,
+            rating: {
+              rate: p.rating?.rate || 4.5,
+              count: p.rating?.count || 0,
+            },
+          }));
+
+        setRelatedProducts(related);
+      }
     } catch (error) {
       console.error("Error fetching product:", error);
     } finally {
@@ -59,18 +89,13 @@ export default function ProductDetail() {
     }
   };
 
-  // Handler (uses react-hot-toast's toast)
   const handleAddToCart = () => {
     if (added) {
-      // If you have a removeFromCart API, call it here (example commented)
-      // removeFromCart(product.id, quantity);
       SetAdded(false);
       toast.success("Product removed from cart.");
       return;
     }
 
-    // addToCart called quantity times (if your addToCart supports quantity arg,
-    // prefer addToCart(product, quantity) instead of looping)
     for (let i = 0; i < quantity; i++) {
       addToCart(product);
     }
@@ -78,6 +103,7 @@ export default function ProductDetail() {
     SetAdded(true);
     toast.success(`${quantity} × ${product.title} added to your cart.`);
   };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -141,9 +167,25 @@ export default function ProductDetail() {
 
             {/* Price */}
             <div className="mb-6">
-              <span className="text-4xl font-bold text-gray-900">
-                ${product.price.toFixed(2)}
-              </span>
+              <div className="flex items-center gap-3">
+                <span className="text-4xl font-bold text-gray-900">
+                  ${product.offerPrice.toFixed(2)}
+                </span>
+                {product.offerPrice < product.price && (
+                  <>
+                    <span className="text-xl text-gray-500 line-through">
+                      ${product.price.toFixed(2)}
+                    </span>
+                    <span className="bg-red-100 text-red-600 text-sm font-semibold px-3 py-1 rounded">
+                      {Math.round(
+                        ((product.price - product.offerPrice) / product.price) *
+                          100,
+                      )}
+                      % OFF
+                    </span>
+                  </>
+                )}
+              </div>
             </div>
 
             {/* Description */}
@@ -189,9 +231,6 @@ export default function ProductDetail() {
             <div className="flex gap-3 mb-8">
               <Button
                 size="lg"
-                disabled={
-                  false /* if you want to disable once added, use disabled={false} -> replace with disabled={false} or disabled={someCondition} */
-                }
                 className={`flex-1 transition-all cursor-pointer ${
                   added
                     ? "bg-green-600 hover:bg-green-600 "
@@ -204,14 +243,6 @@ export default function ProductDetail() {
               </Button>
 
               <Toaster />
-
-              {/* <Button size="lg" variant="outline">
-                <Heart className="h-5 w-5" />
-              </Button>
-
-              <Button size="lg" variant="outline">
-                <Share2 className="h-5 w-5" />
-              </Button> */}
             </div>
 
             {/* Features */}
