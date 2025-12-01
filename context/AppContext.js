@@ -77,10 +77,10 @@ export const AppContextProvider = (props) => {
         await axios.post(
           "/api/cart/update",
           { cartData },
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${token}` } },
         );
 
-        toast.success("Item added to cart");
+        // toast.success("Item added to cart");
       } catch (error) {
         toast.error(error.message);
       }
@@ -102,7 +102,7 @@ export const AppContextProvider = (props) => {
         await axios.post(
           "/api/cart/update",
           { cartData },
-          { headers: { Authorization: `Bearer ${token} ` } }
+          { headers: { Authorization: `Bearer ${token} ` } },
         );
 
         toast.success("Cart Updated");
