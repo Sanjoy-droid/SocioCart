@@ -43,7 +43,8 @@ export default function ProductGrid({ categoryFilter = null }) {
           id: product._id,
           title: product.name,
           description: product.description,
-          price: product.offerPrice,
+          price: product.price,
+          offerPrice: product.offerPrice,
           image: product.image?.[0] || "", // Use first image from array
           category: product.category,
           rating: { rate: 0, count: 0 }, // Add default rating if needed

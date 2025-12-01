@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useUser } from "@clerk/nextjs";
-import { ArrowLeft, Edit, Trash2, Search, Plus, Package } from "lucide-react";
+import { ArrowLeft, Search, Plus, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useAppContext } from "@/context/AppContext";
+import ProductCard from "@/components/ProductCard";
 
 export default function MyProducts() {
   const { products, router } = useAppContext();
@@ -112,90 +113,21 @@ export default function MyProducts() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProducts.map((product) => (
-              <Card
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProducts.map((product, idx) => (
+              <ProductCard
                 key={product._id}
-                className="border-none shadow-lg hover:shadow-xl transition-shadow overflow-hidden group"
-              >
-                <div className="relative h-48 overflow-hidden bg-gray-100">
-                  <img
-                    src={product.image[0]}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  {product.offerPrice < product.price && (
-                    <Badge className="absolute top-3 left-3 bg-red-500 hover:bg-red-600">
-                      Sale
-                    </Badge>
-                  )}
-                  <Badge className="absolute top-3 right-3 bg-green-500 hover:bg-green-600">
-                    Active
-                  </Badge>
-                </div>
-                <CardHeader>
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1">
-                      <CardTitle className="text-lg line-clamp-1">
-                        {product.name}
-                      </CardTitle>
-                      <CardDescription className="line-clamp-2 mt-1">
-                        {product.description}
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex flex-col">
-                        <span className="text-2xl font-bold text-purple-600">
-                          ${product.offerPrice}
-                        </span>
-                        {product.offerPrice < product.price && (
-                          <span className="text-sm text-gray-500 line-through">
-                            ${product.price}
-                          </span>
-                        )}
-                      </div>
-                      <Badge variant="outline" className="text-xs">
-                        {product.category}
-                      </Badge>
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      Images:{" "}
-                      <span className="font-semibold">
-                        {product.image.length} photo
-                        {product.image.length > 1 ? "s" : ""}
-                      </span>
-                    </div>
-                    {/*   <div className="flex gap-2 pt-2"> */}
-                    {/*     <Button */}
-                    {/*       variant="outline" */}
-                    {/*       size="sm" */}
-                    {/*       className="flex-1 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-300" */}
-                    {/*       onClick={() => */}
-                    {/*         router.push( */}
-                    {/*           `/seller/dashboard/edit-product/${product._id}`, */}
-                    {/*         ) */}
-                    {/*       } */}
-                    {/*     > */}
-                    {/*       <Edit className="h-4 w-4 mr-1" /> */}
-                    {/*       Edit */}
-                    {/*     </Button> */}
-                    {/*     <Button */}
-                    {/*       variant="outline" */}
-                    {/*       size="sm" */}
-                    {/*       className="flex-1 hover:bg-red-50 hover:text-red-600 hover:border-red-300" */}
-                    {/*       onClick={() => handleDelete(product._id)} */}
-                    {/*     > */}
-                    {/*       <Trash2 className="h-4 w-4 mr-1" /> */}
-                    {/*       Delete */}
-                    {/*     </Button> */}
-                    {/*   </div> */}
-                  </div>
-                </CardContent>
-              </Card>
+                product={{
+                  id: product._id,
+                  title: product.name,
+                  image: product.image[0] || product.image,
+                  category: product.category,
+                  price: product.price,
+                  offerPrice: product.offerPrice,
+                  rating: product.rating,
+                }}
+                index={idx}
+              />
             ))}
           </div>
         )}

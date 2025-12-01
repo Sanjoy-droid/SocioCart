@@ -136,10 +136,19 @@ export default function ProductCard({ product, index = 0 }) {
 
           {/* Price */}
           <div className="flex items-center justify-between">
-            <div>
+            <div className="flex items-center gap-2">
               <span className="text-2xl font-bold text-gray-900">
+                ${product.offerPrice.toFixed(2)}
+              </span>
+              <span className="text-sm text-gray-500 line-through">
                 ${product.price.toFixed(2)}
               </span>
+            </div>
+            <div className="bg-green-100 text-green-700 text-xs font-semibold px-2 py-1 rounded">
+              {Math.round(
+                ((product.price - product.offerPrice) / product.price) * 100,
+              )}
+              % OFF
             </div>
           </div>
         </div>
