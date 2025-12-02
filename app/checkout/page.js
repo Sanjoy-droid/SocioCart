@@ -2,19 +2,19 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { CreditCard, Lock, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useCart } from "@/context/CartContext";
+import { useAppContext } from "@/context/AppContext";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Checkout() {
-  const router = useRouter();
-  const { cart, clearCart } = useCart();
   const { toast } = useToast();
+  const { products, cartItems, setCartItems, getCartCount, router } =
+    useAppContext();
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -30,9 +30,20 @@ export default function Checkout() {
     cvv: "",
   });
 
-  const subtotal = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
+  // Build cart items array with product details
+  const cartItemsArray = Object.keys(cartItems)
+    .map((itemId) => {
+      const product = products.find((p) => p._id === itemId);
+      const quantity = cartItems[itemId];
+      if (!product || quantity <= 0) return null;
+      return { ...product, quantity };
+    })
+    .filter(Boolean);
+
+  // Calculate totals
+  const subtotal = cartItemsArray.reduce(
+    (sum, item) => sum + item.offerPrice * item.quantity,
+    0,
   );
   const shipping = subtotal > 100 ? 0 : 10;
   const tax = subtotal * 0.1;
@@ -42,29 +53,34 @@ export default function Checkout() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setIsProcessing(true);
 
     // Simulate payment processing
     setTimeout(() => {
       setIsProcessing(false);
-      clearCart();
+
+      // Clear cart
+      setCartItems({});
+
       toast({
         title: "Order placed successfully!",
         description:
           "Thank you for your purchase. You'll receive a confirmation email shortly.",
       });
+
       router.push("/order-confirmation");
     }, 2000);
   };
 
-  if (cart.length === 0) {
+  // Empty cart check
+  if (getCartCount() === 0) {
     return (
       <div className="min-h-screen pt-20 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-4">Your cart is empty</h2>
-          <Button onClick={() => router.push("/products")}>
+          <Button onClick={() => router.push("/all-products")}>
             Continue Shopping
           </Button>
         </div>
@@ -246,26 +262,26 @@ export default function Checkout() {
                 <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
 
                 <div className="space-y-4 mb-6">
-                  {cart.map((item) => (
-                    <div key={item.id} className="flex gap-4">
-                      <div className="relative w-16 h-16 bg-gray-100 rounded-lg p-2">
+                  {cartItemsArray.map((item) => (
+                    <div key={item._id} className="flex gap-4">
+                      <div className="relative w-16 h-16 bg-gray-100 rounded-lg p-2 overflow-hidden">
                         <Image
-                          src={item.image}
-                          alt={item.title}
+                          src={item.image[0]}
+                          alt={item.name}
                           fill
-                          className="object-contain"
+                          className="object-contain mix-blend-multiply"
                         />
                       </div>
                       <div className="flex-1">
                         <h3 className="font-medium text-sm line-clamp-2">
-                          {item.title}
+                          {item.name}
                         </h3>
                         <p className="text-sm text-gray-600">
                           Qty: {item.quantity}
                         </p>
                       </div>
                       <div className="font-semibold">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        ${(item.offerPrice * item.quantity).toFixed(2)}
                       </div>
                     </div>
                   ))}

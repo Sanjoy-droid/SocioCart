@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { Toaster } from "react-hot-toast";
 import { ClerkProvider } from "@clerk/nextjs";
 import { AppContextProvider } from "@/context/AppContext";
+import Draft from "@/components/Draft";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({ children }) {
               <Toaster />
               {children}
               <Footer />
+              {/*<Draft />*/}
             </CartProvider>
           </AppContextProvider>
         </body>
