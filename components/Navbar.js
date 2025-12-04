@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import CartDrawer from "./CartDrawer";
+import { useAppContext } from "@/context/AppContext";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -20,6 +21,7 @@ export default function Navbar() {
   const { openSignIn } = useClerk();
   const router = useRouter();
 
+  const { totalItems } = useAppContext();
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -103,9 +105,9 @@ export default function Navbar() {
                 onClick={() => router.push("/cartitems")}
               >
                 <ShoppingCart className="h-5 w-5 text-gray-700" />
-                {cartItemsCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
-                    {cartItemsCount}
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold shadow-lg">
+                    {totalItems}
                   </span>
                 )}
               </Button>
@@ -233,7 +235,7 @@ export default function Navbar() {
         </div>
       </nav>
 
-      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      {/* <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} /> */}
     </>
   );
 }

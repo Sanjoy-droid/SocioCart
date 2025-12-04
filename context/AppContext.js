@@ -3,7 +3,7 @@ import { useAuth, useUser } from "@clerk/nextjs";
 import { getAuth } from "@clerk/nextjs/server";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useMemo, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export const AppContext = createContext();
@@ -122,6 +122,11 @@ export const AppContextProvider = (props) => {
     return totalCount;
   };
 
+  const totalItems = useMemo(
+    () => Object.values(cartItems).reduce((sum, qty) => sum + qty, 0),
+    [cartItems],
+  );
+
   const getCartAmount = () => {
     let totalAmount = 0;
     for (const items in cartItems) {
@@ -158,6 +163,7 @@ export const AppContextProvider = (props) => {
     updateCartQuantity,
     getCartCount,
     getCartAmount,
+    totalItems,
   };
 
   return (
