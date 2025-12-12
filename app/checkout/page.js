@@ -153,7 +153,7 @@ export default function Checkout() {
                 <span className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm">
                   1
                 </span>
-                Contact Email
+                Contact Email (optional)
               </h2>
               <input
                 type="email"
@@ -306,7 +306,7 @@ export default function Checkout() {
 
                 <Button
                   onClick={handlePlaceOrder}
-                  disabled={isProcessing || !email || !selectedAddress}
+                  disabled={isProcessing || !selectedAddress}
                   className="w-full h-14 text-lg font-bold bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 cursor-pointer"
                 >
                   {isProcessing ? (
